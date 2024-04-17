@@ -1,0 +1,20 @@
+# The directory where the exported files will be saved
+exportDir: ""
+# The directory where the Garmin auth token will be saved
+tokenDir: ""
+zones:
+  - name: "1"
+    min: 0
+    max: 100
+  - name: "2"
+    min: 100
+    max: 120
+  - name: "3"
+    min: 120
+    max: 140
+  - name: "4"
+    min: 140
+    max: 160
+  - name: "5"
+    min: 160
+    max: 9999

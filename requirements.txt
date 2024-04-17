@@ -1,0 +1,2 @@
+garth>=v0.4.45
+pyinstaller>=6.6
