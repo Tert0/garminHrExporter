@@ -1,1 +1,4 @@
-garth>=v0.4.45
+garth>=0.4.45
+python-dateutil>=2.9.0
+pyyaml>=6.0.1
+pyinstaller>=6.6.0
