@@ -161,8 +161,6 @@ filename = os.path.join(export_dir, date.date().isoformat() + '-hrv.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(hrv_data, indent=4))
 
-print('HRV data exported to', filename)
-
 # get the stress data for the given date
 url = f'/wellness-service/wellness/dailyStress/{date.date().isoformat()}'
 stress_data = connect_api(garth.client, url, params=params)
@@ -173,8 +171,6 @@ stress_data = connect_api(garth.client, url, params=params)
 filename = os.path.join(export_dir, date.date().isoformat() + '-stress.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(stress_data, indent=4))
-
-print('Stress data exported to', filename)
 
 # get the sleep data for the given date
 url = f'/wellness-service/wellness/dailySleepData/{display_name}'
@@ -190,5 +186,3 @@ sleep_data = connect_api(garth.client, url, params=params)
 filename = os.path.join(export_dir, date.date().isoformat() + '-sleep.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(sleep_data, indent=4))
-
-print('Sleep data exported to', filename)
