@@ -103,8 +103,6 @@ filename = os.path.join(export_dir, date.date().isoformat() + '.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(heart_rate_data, indent=4))
 
-print('Raw Heart rate data exported to', filename)
-
 # convert the heart rate data to a CSV file
 # the CSV file has the following columns:
 # - timestamp: the timestamp of the heart rate data
@@ -124,30 +122,27 @@ with open(filename, 'w') as file:
            
             file.write(f"{timestamp},{date_formatted},{value},{zone}\n")
 
-print('CSV Heart rate data exported to', filename)
 
 # calculate the percentage of time spent in each heart rate zone
 # the heart rate zones are defined in the config file
 # the result is saved to a file in the export directory with the name YYYY-MM-DD-zones.json
-zones = {}
+zones = {zone["name"]: 0 for zone in config["zones"]}
 for entry in heart_rate_data['heartRateValues']:
     value = entry[1]
     if value is None:
         continue
     zone = get_hr_zone(config, value)
-    if zone not in zones:
-        zones[zone] = 0
     zones[zone] += 1
 
 total = sum(zones.values())
 for zone, count in zones.items():
-    zones[zone] = count / total
+    zones[zone] = count * 2 / (60 * 24)
+zones["?"] = 1 - (total * 2 / (60 * 24))
 
 filename = os.path.join(export_dir, date.date().isoformat() + '-zones.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(zones, indent=4))
 
-print('Heart rate zones exported to', filename)
 
 # print the result
 print('Heart rate zones:')
