@@ -153,3 +153,47 @@ print('Heart rate zones exported to', filename)
 print('Heart rate zones:')
 for zone, percentage in zones.items():
     print(f'{zone}: {percentage:.2%}')
+
+
+# get the HRV data for the given date
+url = f'/hrv-service/hrv/{date.date().isoformat()}'
+hrv_data = connect_api(garth.client, url)
+
+# save the HRV data to a file in the export directory
+# if the file already exists, it will be overwritten
+# the name of the file is the date in the format YYYY-MM-DD-hrv.json
+filename = os.path.join(export_dir, date.date().isoformat() + '-hrv.json')
+with open(filename, 'w') as file:
+    file.write(json.dumps(hrv_data, indent=4))
+
+print('HRV data exported to', filename)
+
+# get the stress data for the given date
+url = f'/wellness-service/wellness/dailyStress/{date.date().isoformat()}'
+stress_data = connect_api(garth.client, url, params=params)
+
+# save the stress data to a file in the export directory
+# if the file already exists, it will be overwritten
+# the name of the file is the date in the format YYYY-MM-DD-stress.json
+filename = os.path.join(export_dir, date.date().isoformat() + '-stress.json')
+with open(filename, 'w') as file:
+    file.write(json.dumps(stress_data, indent=4))
+
+print('Stress data exported to', filename)
+
+# get the sleep data for the given date
+url = f'/wellness-service/wellness/dailySleepData/{display_name}'
+params = {
+    'date': date.date().isoformat(),
+    "nonSleepBufferMinutes": 60
+}
+sleep_data = connect_api(garth.client, url, params=params)
+
+# save the sleep data to a file in the export directory
+# if the file already exists, it will be overwritten
+# the name of the file is the date in the format YYYY-MM-DD-sleep.json
+filename = os.path.join(export_dir, date.date().isoformat() + '-sleep.json')
+with open(filename, 'w') as file:
+    file.write(json.dumps(sleep_data, indent=4))
+
+print('Sleep data exported to', filename)
