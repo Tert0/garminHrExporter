@@ -123,6 +123,7 @@ with open(filename, 'w') as file:
             file.write(f"{timestamp},{date_formatted},{value},{zone}\n")
 
 
+
 # calculate the percentage of time spent in each heart rate zone
 # the heart rate zones are defined in the config file
 # the result is saved to a file in the export directory with the name YYYY-MM-DD-zones.json
@@ -161,6 +162,15 @@ filename = os.path.join(export_dir, date.date().isoformat() + '-hrv.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(hrv_data, indent=4))
 
+    
+filename = os.path.join(export_dir, date.date().isoformat() + '-hrv.csv')
+with open(filename, "w") as file:
+    file.write("timestamp,hrv\n")
+    for entry in hrv_data['hrvReadings']:
+        value = entry["hrvValue"]
+        timestamp = entry["readingTimeLocal"]
+        file.write(f"{timestamp},{value}\n")
+
 # get the stress data for the given date
 url = f'/wellness-service/wellness/dailyStress/{date.date().isoformat()}'
 stress_data = connect_api(garth.client, url, params=params)
@@ -171,6 +181,21 @@ stress_data = connect_api(garth.client, url, params=params)
 filename = os.path.join(export_dir, date.date().isoformat() + '-stress.json')
 with open(filename, 'w') as file:
     file.write(json.dumps(stress_data, indent=4))
+
+filename = os.path.join(export_dir, date.date().isoformat() + '-stress.csv')
+with open(filename, "w") as file:
+    file.write("timestamp,stress_level\n")
+    for entry in stress_data["stressValuesArray"]:
+        timestamp, stress_level = entry
+        file.write(f"{timestamp},{stress_level}\n")
+
+filename = os.path.join(export_dir, date.date().isoformat() + '-body-battery.csv')
+with open(filename, "w") as file:
+    file.write("timestamp,body_battery_status,body_battery_level\n")
+    for entry in stress_data["bodyBatteryValuesArray"]:
+        timestamp, status, level, _ = entry
+        file.write(f"{timestamp},{status},{level}\n")
+
 
 # get the sleep data for the given date
 url = f'/wellness-service/wellness/dailySleepData/{display_name}'
